@@ -598,12 +598,14 @@ class KVStoreDistServer {
     const NDArray& stored = store_[key];
     CHECK(!stored.is_none()) << "init " << key << " first";
 
+    // as server returns when store_realt is ready in this case
+    if (has_multi_precision_copy(type)) stored.WaitToRead();
+
     auto len = stored.shape().Size() * mshadow::mshadow_sizeof(stored.dtype());
     response.keys = req_data.keys;
     response.lens = {len};
-    stored.WaitToRead();
-    auto data = static_cast<char*>(stored.data().dptr_);
-    response.vals.reset(data, len, [](char* data){});
+    // TODO(mli) try to remove this CopyFrom
+    response.vals.CopyFrom(static_cast<const char*>(stored.data().dptr_), len);
     server->Response(req_meta, response);
   }
 
