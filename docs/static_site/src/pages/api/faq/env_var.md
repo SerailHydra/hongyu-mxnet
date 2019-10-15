@@ -184,6 +184,11 @@ $env:MXNET_STORAGE_FALLBACK_LOG_VERBOSE=0
   - Values: 0(false) or 1(true) ```(default=1)```
   - If true, weight updates are performed during the communication step, if possible.
 
+* MXNET_KVSTORE_SLICE_THRESHOLD
+  - Values: Int ```(default=0)```
+  - The maximum number of parameters in a parameter slice for priority-based parameter synchronization.
+  - Only used when priority-based update in KVStore is enabled.
+
 ## Memonger
 
 * MXNET_BACKWARD_DO_MIRROR
