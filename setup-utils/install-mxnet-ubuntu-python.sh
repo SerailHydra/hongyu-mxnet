@@ -38,10 +38,10 @@ echo "Installing Numpy..."
 apt-get install python-numpy
 
 echo "Installing Python setuptools pip..."
-apt-get install -y python-setuptools python-pip
+apt-get install -y python-setuptools
 
 echo "Updating pip..."
-pip install -U pip
+#python -m pip install --upgrade pip
 
 echo "Installing Python package for MXNet..."
 cd python; python setup.py install
