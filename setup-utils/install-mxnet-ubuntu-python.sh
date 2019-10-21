@@ -27,33 +27,33 @@ MXNET_HOME="$HOME/hongyu-mxnet/"
 echo "MXNet root folder: $MXNET_HOME"
 
 echo "Installing build-essential, libatlas-base-dev, libopencv-dev, pip, graphviz ..."
-apt-get update
-apt-get install -y build-essential libatlas-base-dev libopencv-dev graphviz
+sudo apt-get update
+sudo apt-get install -y build-essential libatlas-base-dev libopencv-dev graphviz
 
 echo "Building MXNet core. This can take few minutes..."
 cd "$MXNET_HOME"
 make -j$(nproc)
 
 echo "Installing Numpy..."
-apt-get install python-numpy
+sudo apt-get install python-numpy
 
 echo "Installing Python setuptools pip..."
-apt-get install -y python-setuptools
+sudo apt-get install -y python-setuptools
 
 echo "Updating pip..."
 #python -m pip install --upgrade pip
 
 echo "Installing Python package for MXNet..."
-cd python; python setup.py install
+cd python; sudo python setup.py install
 
 echo "Adding MXNet path to your ~/.bashrc file"
 echo "export PYTHONPATH=$MXNET_HOME/python:$PYTHONPATH" >> ~/.bashrc
 source ~/.bashrc
 
 echo "Install Graphviz for plotting MXNet network graph..."
-pip install graphviz
+sudo pip install graphviz
 
 echo "Installing Jupyter notebook..."
-pip install jupyter
+sudo pip install jupyter
 
 echo "Done! MXNet for Python installation is complete. Go ahead and explore MXNet with Python :-)"
