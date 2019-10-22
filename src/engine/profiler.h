@@ -61,6 +61,9 @@ struct OprExecStat {
   uint32_t dev_id;
 
   int32_t key = -1;
+
+  unsigned long long startns;
+  unsigned long long stopns;
 };
 
 /*!

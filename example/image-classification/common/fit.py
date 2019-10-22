@@ -22,6 +22,7 @@ import time
 from mxnet import profiler
 from os.path import expanduser
 import socket
+from mxnet.base import _LIB
 
 def _get_lr_scheduler(args, kv):
     if 'lr_factor' not in args or args.lr_factor >= 1:
@@ -199,14 +200,16 @@ def fit(args, network, data_loader, **kwargs):
         eval_metrics.append(mx.metric.create('top_k_accuracy', top_k=args.top_k))
 
     logfile = expanduser("~")+"/profiler-"+str(socket.gethostname())+"-"+str(kv.rank)+".json"
-    mx.profiler.profiler_set_config(mode='all', filename=logfile)
+    #mx.profiler.profiler_set_config(mode='all', filename=logfile)
     def callback():
         def switch_profiler(param):
-            if param.epoch == 0 and param.nbatch == 100:
-                profiler.profiler_set_state('run')
-            if param.epoch == 0 and param.nbatch == 110:
-                profiler.profiler_set_state('stop')
-                profiler.dump_profile()
+            if param.epoch == 0 and param.nbatch == 20:
+                _LIB.MXStartCuptiTracing()
+                #profiler.profiler_set_state('run')
+            if param.epoch == 0 and param.nbatch == 30:
+                _LIB.MXEndCuptiTracing()
+                #profiler.profiler_set_state('stop')
+                #profiler.dump_profile()
 
         return switch_profiler;
 

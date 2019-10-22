@@ -29,6 +29,9 @@
 #include <fstream>
 #include <thread>
 #include "./profiler.h"
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/syscall.h>
 
 #if MXNET_USE_CUDA
 #include "../common/cuda_utils.h"
@@ -220,11 +223,21 @@ inline uint64_t NowInUsec() {
 #endif
 }
 
+unsigned long long get_nanoseconds()
+{
+  std::chrono::nanoseconds ns = std::chrono::duration_cast< std::chrono::nanoseconds >(
+    std::chrono::system_clock::now().time_since_epoch()
+  );
+  return ns.count();
+}
+
+
 void SetOprStart(OprExecStat* opr_stat) {
   if (!opr_stat) {
     return;
   }
   opr_stat->opr_start_rel_micros = NowInUsec() - Profiler::Get()->GetInitTime();
+  opr_stat->startns = get_nanoseconds();
 }
 
 void SetOprEnd(OprExecStat* opr_stat) {
@@ -232,10 +245,14 @@ void SetOprEnd(OprExecStat* opr_stat) {
     return;
   }
   opr_stat->opr_end_rel_micros   = NowInUsec() - Profiler::Get()->GetInitTime();
+  opr_stat->stopns = get_nanoseconds();
+  fprintf(stderr, "PUSH [ %llu - %llu ] process=%u thread=%u", opr_stat->startns, opr_stat->stopns, getpid(), syscall(SYS_gettid));
 }
 
 OprExecStat* SetOprStart(std::string &name) {
   OprExecStat *opr_stat = nullptr;
+  opr_stat->startns = get_nanoseconds();
+  fprintf(stderr, "set_opr_start\n");
 #if MXNET_USE_PROFILER
   Profiler *profiler = Profiler::Get();
   if (profiler->GetState() == Profiler::ProfilerState::kRunning) {

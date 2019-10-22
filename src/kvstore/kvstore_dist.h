@@ -198,12 +198,14 @@ class KVStoreDist : public KVStoreLocal {
   void PushImpl(const std::vector<int>& keys,
                 const std::vector<NDArray>& values,
                 int priority) override {
+    fprintf(stderr, "PushImpl\n");
     Push_(keys, values, priority, true);
   }
 
   void PullImpl(const std::vector<int>& keys,
                 const std::vector<NDArray*>& values,
                 int priority) override {
+    fprintf(stderr, "PullImpl\n");
     std::vector<int> uniq_keys;
     std::vector<std::vector<NDArray*> > grouped_vals;
     GroupKVPairsPull(keys, values, &uniq_keys, &grouped_vals);

@@ -162,8 +162,9 @@ void Tracer::APICallback(void *userdata, CUpti_CallbackDomain domain,
 
 void Tracer::ActivityCallback(const CUpti_Activity &record) {
     //int pid = (int)getpid();
-    std::string logname = "cupti_trace.bnff.txt";
-    FILE *log = fopen(logname.c_str(), "a");
+    std::string logname = "mxnet_trace.txt";
+    //FILE *log = fopen(logname.c_str(), "a");
+    FILE *log = stderr;
     switch (record.kind) {
         case CUPTI_ACTIVITY_KIND_MEMCPY: {
             auto *memcpy = reinterpret_cast<const CUpti_ActivityMemcpy *>(&record);
