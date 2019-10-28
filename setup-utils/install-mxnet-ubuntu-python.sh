@@ -23,7 +23,7 @@
 ######################################################################
 set -e
 
-MXNET_HOME="$HOME/mxnet/"
+MXNET_HOME="$HOME/hongyu-mxnet/"
 echo "MXNet root folder: $MXNET_HOME"
 
 echo "Installing build-essential, libatlas-base-dev, libopencv-dev, pip, graphviz ..."
