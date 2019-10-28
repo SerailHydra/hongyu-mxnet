@@ -36,6 +36,7 @@
 #include <mxnet/kvstore.h>
 #include <mxnet/rtc.h>
 #include <mxnet/storage.h>
+#include <mxnet/cupti_tracer.h>
 #include <vector>
 #include <sstream>
 #include <string>
@@ -1285,3 +1286,30 @@ int MXNDArrayCreateFromSharedMem(int shared_pid, int shared_id, const mx_uint *s
   *out = new NDArray(shared_pid, shared_id, TShape(shape, shape + ndim), dtype);
   API_END();
 }
+
+std::shared_ptr<cupti_tracer::Tracer> _GetSharedRef() {
+    static std::shared_ptr<cupti_tracer::Tracer> inst(new cupti_tracer::Tracer());
+    return inst;
+}
+
+cupti_tracer::Tracer* GetTracer() {
+    static cupti_tracer::Tracer *ptr = _GetSharedRef().get();
+    return ptr;
+}
+
+int MXStartCuptiTracing()
+{
+  API_BEGIN();
+  static auto tracer = GetTracer();
+  tracer->start();
+  API_END();
+}
+
+int MXEndCuptiTracing()
+{
+  API_BEGIN();
+  static auto tracer = GetTracer();
+  tracer->stop();
+  API_END();
+}
+

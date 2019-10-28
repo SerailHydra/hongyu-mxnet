@@ -2059,6 +2059,9 @@ MXNET_DLL int MXNDArrayGetSharedMemHandle(NDArrayHandle handle, int* shared_pid,
 MXNET_DLL int MXNDArrayCreateFromSharedMem(int shared_pid, int shared_id, const mx_uint *shape,
                                            mx_uint ndim, int dtype, NDArrayHandle *out);
 
+MXNET_DLL int MXStartCuptiTracing();
+
+MXNET_DLL int MXEndCuptiTracing();
 
 #ifdef __cplusplus
 }
