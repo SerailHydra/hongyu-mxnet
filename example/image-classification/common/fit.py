@@ -203,6 +203,7 @@ def fit(args, network, data_loader, **kwargs):
     #mx.profiler.profiler_set_config(mode='all', filename=logfile)
     def callback():
         def switch_profiler(param):
+            return
             if param.epoch == 0 and param.nbatch == 20:
                 _LIB.MXStartCuptiTracing()
                 #profiler.profiler_set_state('run')

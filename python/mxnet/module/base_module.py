@@ -480,7 +480,14 @@ class BaseModule(object):
             data_iter = iter(train_data)
             end_of_batch = False
             next_data_batch = next(data_iter)
+            count = 0
             while not end_of_batch:
+                count += 1
+                if count == 200:
+                    t0 = time.time()
+                if count == 400:
+                    t1 = time.time()
+                    print("iteration time: {} ms".format((t1 - t0) * 1000.0))
                 data_batch = next_data_batch
                 if monitor is not None:
                     monitor.tic()
