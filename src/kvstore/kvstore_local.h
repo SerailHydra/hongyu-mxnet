@@ -35,6 +35,7 @@
 #include <algorithm>
 #include "./comm.h"
 #include "./kvstore_utils.h"
+#include <execinfo.h>
 
 namespace mxnet {
 namespace kvstore {

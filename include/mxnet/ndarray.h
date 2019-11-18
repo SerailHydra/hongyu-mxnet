@@ -630,6 +630,8 @@ class NDArray {
                    std::vector<NDArray>* data,
                    std::vector<std::string>* keys);
 
+  int comm_key;
+
  private:
   friend class Imperative;
   /*! \brief the real data chunk that backs NDArray */

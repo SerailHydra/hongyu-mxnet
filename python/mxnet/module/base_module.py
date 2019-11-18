@@ -505,7 +505,11 @@ class BaseModule(object):
                     for callback in _as_list(batch_end_callback):
                         callback(batch_end_params)
                 nbatch += 1
-
+                if nbatch == 20:
+                    t0 = time.time()
+                if nbatch == 200:
+                    t1 = time.time()
+                    print("iteration time: {:.2f} ms\n".format((t1 - t0) * 1000.0 / 180))
             # one epoch of training is finished
             for name, val in eval_metric.get_name_value():
                 self.logger.info('Epoch[%d] Train-%s=%f', epoch, name, val)

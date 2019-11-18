@@ -9,6 +9,11 @@
 #include "ps/base.h"
 #include "ps/simple_app.h"
 #include "../../../src/engine/profiler.h"
+
+#include <chrono>
+#include <sys/types.h>
+#include <unistd.h>
+
 namespace ps {
 
 /**
@@ -407,6 +412,11 @@ struct KVServerDefaultHandle {
 
 template <typename Val>
 void KVServer<Val>::Process(const Message& msg) {
+  std::chrono::nanoseconds ts0_ = std::chrono::duration_cast< std::chrono::nanoseconds >(
+    std::chrono::system_clock::now().time_since_epoch()
+  );
+  double ts0 = (double)ts0_.count();
+
   if (msg.meta.simple_app) {
     SimpleApp::Process(msg); return;
   }
@@ -429,6 +439,13 @@ void KVServer<Val>::Process(const Message& msg) {
   }
   CHECK(request_handle_);
   request_handle_(meta, data, this);
+
+  std::chrono::nanoseconds ts1_ = std::chrono::duration_cast< std::chrono::nanoseconds >(
+    std::chrono::system_clock::now().time_since_epoch()
+  );
+  double ts1 = (double)ts1_.count();
+
+  //fprintf(stderr, "push: %d; sender: %d; ts: %d; key_size: %d; val_size: %d; dur: %.0lf\n", (int)meta.push, meta.sender, meta.timestamp, data.keys.size(), data.vals.size(), ts1 - ts0);
 }
 
 template <typename Val>
