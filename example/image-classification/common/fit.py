@@ -19,7 +19,6 @@ import mxnet as mx
 import logging
 import os
 import time
-from mxnet import profiler
 from os.path import expanduser
 import socket
 
@@ -198,16 +197,9 @@ def fit(args, network, data_loader, **kwargs):
     if args.top_k > 0:
         eval_metrics.append(mx.metric.create('top_k_accuracy', top_k=args.top_k))
 
-    logfile = expanduser("~")+"/profiler-"+str(socket.gethostname())+"-"+str(kv.rank)+".json"
-    mx.profiler.profiler_set_config(mode='all', filename=logfile)
     def callback():
         def switch_profiler(param):
-            if param.epoch == 0 and param.nbatch == 100:
-                profiler.profiler_set_state('run')
-            if param.epoch == 0 and param.nbatch == 110:
-                profiler.profiler_set_state('stop')
-                profiler.dump_profile()
-
+            pass
         return switch_profiler;
 
     # callbacks that run after each batch
