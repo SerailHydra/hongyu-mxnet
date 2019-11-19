@@ -30,7 +30,7 @@ from ..model import BatchEndParam
 from ..initializer import Uniform
 from ..io import DataDesc
 from ..base import _as_list
-
+import time
 
 def _check_input_names(symbol, names, typename, throw):
     """Check that all input names are in symbol's arguments."""
